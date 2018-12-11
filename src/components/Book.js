@@ -12,7 +12,7 @@ class Book extends React.Component {
             <div className="book">
                 <div className="book-top">
                     <div className="book-cover"
-                         style={{width: 128, height: 193, backgroundImage: `url(${this.props.bookImageUrl})`}}></div>
+                         style={{width: 128, height: 193, backgroundImage: `url(${(this.props.book.imageLinks) ? (this.props.book.imageLinks.smallThumbnail) : []})`}}></div>
                     <div className="book-shelf-changer">
                         <select onChange={this.handleShelfChange} value={this.props.book.shelf}>
                             <option value="move" disabled>Move to...</option>
@@ -24,7 +24,7 @@ class Book extends React.Component {
                     </div>
                 </div>
                 <div className="book-title">{this.props.title}</div>
-                <div className="book-authors">{this.props.book.authors.join(' | ')}</div>
+                <div className="book-authors">{(this.props.book.authors) ? (this.props.book.authors.join(' | ')) : []}</div>
             </div>
         )
     }

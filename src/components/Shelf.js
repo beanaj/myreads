@@ -11,7 +11,6 @@ class Shelf extends React.Component {
                 return <Book key={book.id}
                              id={book.id}
                              title={book.title}
-                             bookImageUrl={book.imageLinks.smallThumbnail || 'notfound'}
                              changeShelf={this.props.changeShelf}
                              book={book}
                 />
