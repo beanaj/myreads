@@ -3,14 +3,17 @@ import * as BooksAPI from './BooksAPI'
 import Shelf from './components/Shelf'
 import './App.css'
 import {BrowserRouter, Route, Link, Switch} from 'react-router-dom'
+import debounce from 'debounce'
+
+const shelfTitles = ['Currently Reading', 'Want to Read', 'Read'];
+const shelfData =  ['currentlyReading', 'wantToRead', 'read'];
 
 class BooksApp extends React.Component {
     state = {
         books: [],
-        searchBooks: [],
-        shelfTitles: ['Currently Reading', 'Want to Read', 'Read'],
-        shelfData: ['currentlyReading', 'wantToRead', 'read']
+        searchBooks: []
     };
+
 
     refreshBooks() {
         BooksAPI.getAll().then(books => this.setState({books}));
@@ -31,7 +34,7 @@ class BooksApp extends React.Component {
 
     }
 
-    clearSearch() {
+    clearSearch = ()=>{
         this.setState({searchBooks: []})
     }
 
@@ -44,26 +47,28 @@ class BooksApp extends React.Component {
     };
 
     searchShelf = (search) => {
+        if(search.length <1){
+            this.clearSearch();
+            return;
+        }
         if (search !== undefined) {
             BooksAPI.search(search).then(data => {
-                console.log(data)
-                this.refreshSearch(data);
+                if(data.error){
+                    this.clearSearch();
+                }else{
+                    this.refreshSearch(data);
+                }
             })
         }
     };
 
     handleKeyPress = event => {
-        console.log(event.target.value)
-        if (event.target.value.length < 1) {
-            this.clearSearch();
-        } else {
-            this.searchShelf(event.target.value);
-        }
-
+        this.searchShelf(event.target.value);
     };
 
     componentDidMount() {
         this.refreshBooks();
+        this.searchShelf = debounce(this.searchShelf, 1000);
     };
 
     render() {
@@ -73,23 +78,23 @@ class BooksApp extends React.Component {
                         <Route exact path="/" render={() => {
                             return (<div className="app">
                                 <Shelf
-                                    title={this.state.shelfTitles[0]}
+                                    title={shelfTitles[0]}
                                     books={this.state.books.filter(book => {
-                                        return book.shelf === this.state.shelfData[0]
+                                        return book.shelf === shelfData[0]
                                     })}
                                     changeShelf={this.changeShelf}
                                 />
                                 <Shelf
-                                    title={this.state.shelfTitles[1]}
+                                    title={shelfTitles[1]}
                                     books={this.state.books.filter(book => {
-                                        return book.shelf === this.state.shelfData[1]
+                                        return book.shelf === shelfData[1]
                                     })}
                                     changeShelf={this.changeShelf}
                                 />
                                 <Shelf
-                                    title={this.state.shelfTitles[2]}
+                                    title={shelfTitles[2]}
                                     books={this.state.books.filter(book => {
-                                        return book.shelf === this.state.shelfData[2]
+                                        return book.shelf === shelfData[2]
                                     })}
                                     changeShelf={this.changeShelf}
                                 />
