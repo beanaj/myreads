@@ -8,7 +8,7 @@
 
 ## Dependencies
 
-All package dependencies are handled by NPM, however if you do not have npm you must install Node.js from here:
+All package dependencies are handled by npm, however if you do not have npm you must install Node.js from here:
 
 https://nodejs.org/en/
 
