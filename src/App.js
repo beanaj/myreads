@@ -70,7 +70,6 @@ class BooksApp extends React.Component {
         return (
             <BrowserRouter>
                 <Switch>
-                    <div>
                         <Route exact path="/" render={() => {
                             return (<div className="app">
                                 <Shelf
@@ -130,7 +129,6 @@ class BooksApp extends React.Component {
 
                         }
                         />
-                    </div>
                 </Switch>
             </BrowserRouter>
         )
