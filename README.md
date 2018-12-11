@@ -16,3 +16,8 @@ https://nodejs.org/en/
 ## Attributions
 
 This code was the starter code provided for the Udacity MyReads project, for the Front-End Nanodegree.
+
+I viewed this repo for help with routing:
+
+https://github.com/sarah-maris/reactnd-project-myreads/blob/master/src/components/App.js
+
