@@ -18,19 +18,21 @@ class BooksApp extends React.Component {
 
     refreshSearch(searchResults) {
         console.log(searchResults)
-        let searchBooks = searchResults.map(searchBook=>{
-            this.state.books.forEach(book=>{
-                if(searchBook.id===book.id){
-                    searchBook.shelf=book.shelf;
-                }else{
-                    searchBook.shelf='none';
+        let searchBooks = searchResults.map(searchBook => {
+            this.state.books.forEach(book => {
+                if (searchBook.id === book.id) {
+                    searchBook.shelf = book.shelf;
                 }
             })
             return searchBook
         })
-            console.log(searchBooks);
-            this.setState({searchBooks})
+        console.log(searchBooks);
+        this.setState({searchBooks})
 
+    }
+
+    clearSearch() {
+        this.setState({searchBooks: []})
     }
 
     changeShelf = (book, shelf) => {
@@ -52,9 +54,9 @@ class BooksApp extends React.Component {
 
     handleKeyPress = event => {
         console.log(event.target.value)
-        if(event.target.value===undefined){
-            this.setState({searchBooks:[]})
-        }else{
+        if (event.target.value.length < 1) {
+            this.clearSearch();
+        } else {
             this.searchShelf(event.target.value);
         }
 
@@ -68,65 +70,67 @@ class BooksApp extends React.Component {
         return (
             <BrowserRouter>
                 <Switch>
-                <div>
-                    <Route exact path="/" render={() => {
-                        return (<div className="app">
-                            <Shelf
-                                title={this.state.shelfTitles[0]}
-                                books={this.state.books.filter(book => {
-                                    return book.shelf === this.state.shelfData[0]
-                                })}
-                                changeShelf={this.changeShelf}
-                            />
-                            <Shelf
-                                title={this.state.shelfTitles[1]}
-                                books={this.state.books.filter(book => {
-                                    return book.shelf === this.state.shelfData[1]
-                                })}
-                                changeShelf={this.changeShelf}
-                            />
-                            <Shelf
-                                title={this.state.shelfTitles[2]}
-                                books={this.state.books.filter(book => {
-                                    return book.shelf === this.state.shelfData[2]
-                                })}
-                                changeShelf={this.changeShelf}
-                            />
-                            <div className="open-search">
-                                <Link to='/search'>
-                                    <button>Add a book</button>
-                                </Link>
-                            </div>
-                        </div>)
-                    }
-
-                    }
-                    />
-                    <Route exact path="/search" render={() => {
-                        return (<div className="search-books">
-                            <div className="search-books-bar">
-                                <Link to='/'>
-                                    <button className="close-search">Close</button>
-                                </Link>
-                                <div className="search-books-input-wrapper">
-                                    <input type="text" placeholder="Search by title or author" onKeyDown={this.handleKeyPress}/>
+                    <div>
+                        <Route exact path="/" render={() => {
+                            return (<div className="app">
+                                <Shelf
+                                    title={this.state.shelfTitles[0]}
+                                    books={this.state.books.filter(book => {
+                                        return book.shelf === this.state.shelfData[0]
+                                    })}
+                                    changeShelf={this.changeShelf}
+                                />
+                                <Shelf
+                                    title={this.state.shelfTitles[1]}
+                                    books={this.state.books.filter(book => {
+                                        return book.shelf === this.state.shelfData[1]
+                                    })}
+                                    changeShelf={this.changeShelf}
+                                />
+                                <Shelf
+                                    title={this.state.shelfTitles[2]}
+                                    books={this.state.books.filter(book => {
+                                        return book.shelf === this.state.shelfData[2]
+                                    })}
+                                    changeShelf={this.changeShelf}
+                                />
+                                <div className="open-search">
+                                    <Link to='/search'
+                                          onClick={this.clearSearch}>
+                                        <button>Add a book</button>
+                                    </Link>
                                 </div>
-                            </div>
-                            <div className="search-books-results">
-                                <ol className="books-grid">
-                                    <Shelf
-                                        title='Search'
-                                        books={this.state.searchBooks}
-                                        changeShelf={this.changeShelf}
-                                    />
-                                </ol>
-                            </div>
-                        </div>)
-                    }
+                            </div>)
+                        }
 
-                    }
-                    />
-                </div>
+                        }
+                        />
+                        <Route exact path="/search" render={() => {
+                            return (<div className="search-books">
+                                <div className="search-books-bar">
+                                    <Link to='/'>
+                                        <button className="close-search">Close</button>
+                                    </Link>
+                                    <div className="search-books-input-wrapper">
+                                        <input type="text" placeholder="Search by title or author"
+                                               onKeyUp={this.handleKeyPress}/>
+                                    </div>
+                                </div>
+                                <div className="search-books-results">
+                                    <ol className="books-grid">
+                                        <Shelf
+                                            title='Search'
+                                            books={this.state.searchBooks}
+                                            changeShelf={this.changeShelf}
+                                        />
+                                    </ol>
+                                </div>
+                            </div>)
+                        }
+
+                        }
+                        />
+                    </div>
                 </Switch>
             </BrowserRouter>
         )
