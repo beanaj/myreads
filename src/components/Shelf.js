@@ -5,9 +5,18 @@ class Shelf extends React.Component {
     state = {};
 
     render() {
-        let shelfBooks = this.props.books.map((book) => {
-            return <Book key={book.id} title={book.title}/>
-        });
+        let shelfBooks = [];
+        if(this.props.books!==undefined){
+            shelfBooks = this.props.books.map((book) => {
+                return <Book key={book.id}
+                             id={book.id}
+                             title={book.title}
+                             bookImageUrl={book.imageLinks.smallThumbnail}
+                             changeShelf = {this.props.changeShelf}
+                             book={book}
+                />
+            });
+        }
 
         return (
             <div className="bookshelf">

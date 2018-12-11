@@ -7,16 +7,24 @@ class BooksApp extends React.Component {
     state = {
         books: [],
         shelfTitles: ['Currently Reading', 'Want to Read', 'Read'],
-        shelfData: [{'Currently Reading':'currentlyReading'}, {'Want To Read':'wantToRead'}, {'Read':'read'}]
+        shelfData: ['currentlyReading', 'wantToRead', 'read'],
+        changeShelf: this.changeShelf
     };
 
-    changeShelf(bookID){
-
+    refreshBooks(){
+        BooksAPI.getAll().then(books => this.setState({books}));
     }
 
-    async componentDidMount(){
-        BooksAPI.getAll().then(books => this.setState({books}));
+    changeShelf = (book, shelf) =>{
+        if(book!==undefined){
+            BooksAPI.update(book, shelf).then(res=>{
+                this.refreshBooks();
+            });
+        }
+    }
 
+    componentDidMount(){
+        this.refreshBooks();
     }
 
     render() {
@@ -24,13 +32,24 @@ class BooksApp extends React.Component {
             <div className="app">
                 <Shelf
                     title={this.state.shelfTitles[0]}
-                    books={this.books}
+                    books={this.state.books.filter(book =>{
+                        return book.shelf === this.state.shelfData[0]
+                    })}
+                    changeShelf={this.changeShelf}
                 />
                 <Shelf
                     title={this.state.shelfTitles[1]}
+                    books={this.state.books.filter(book =>{
+                        return book.shelf === this.state.shelfData[1]
+                    })}
+                    changeShelf={this.changeShelf}
                 />
                 <Shelf
                     title={this.state.shelfTitles[2]}
+                    books={this.state.books.filter(book =>{
+                        return book.shelf === this.state.shelfData[2]
+                    })}
+                    changeShelf={this.changeShelf}
                 />
             </div>
         )
